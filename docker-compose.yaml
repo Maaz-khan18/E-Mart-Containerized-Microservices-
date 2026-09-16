@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   client:
+    image: emart-client:latest
     build:
       context: ./client
     ports:
@@ -12,6 +13,7 @@ services:
       - webapi
 
   api:
+    image: emart-api:latest
     build:
       context: ./nodeapi
     ports:
@@ -23,6 +25,7 @@ services:
       - emongo
 
   webapi:
+    image: emart-webapi:latest
     build:
       context: ./javaapi
     ports:
