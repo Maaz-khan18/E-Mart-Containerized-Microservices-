@@ -1,13 +1,12 @@
-FROM eclipse-temurin:8-jdk AS BUILD_IMAGE
+FROM maven:3.9.9-eclipse-temurin-8 AS build
 WORKDIR /usr/src/app/
-RUN apt update && apt install maven -y
 COPY ./ /usr/src/app/
-RUN mvn install -DskipTests
+RUN mvn -B -DskipTests -Dmaven.wagon.http.retryHandler.count=5 clean package
 
 FROM eclipse-temurin:8-jdk
 
 WORKDIR /usr/src/app/
-COPY --from=BUILD_IMAGE /usr/src/app/target/book-work-0.0.1-SNAPSHOT.jar ./book-work-0.0.1.jar
+COPY --from=build /usr/src/app/target/book-work-0.0.1-SNAPSHOT.jar ./book-work-0.0.1.jar
 
 EXPOSE 9000
 ENTRYPOINT ["java","-jar","book-work-0.0.1.jar"]
